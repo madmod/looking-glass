@@ -1,0 +1,19 @@
+{
+  "name": "looking-glass",
+  "version": "1.0.0",
+  "description": "A view of wonder and mystery.",
+  "main": "index.js",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "/usr/bin/env node index.js",
+    "test": "npm test"
+  },
+  "keywords": [
+  ],
+  "author": "John Wells <madmodmail@gmail.com> (https://github.com/madmod)",
+  "license": "MIT"
+}

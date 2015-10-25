@@ -12,6 +12,6 @@ src="https://www.youtube.com/embed/G9FGgwCQ22w?
 autoplay=1&controls=0&showinfo=0&autohide=1">
 </iframe>
 </div>
-
+<iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="http://forecast.io/embed/#lat=40.2988&lon=111.6965&name=The Bookstore"></iframe>
 {% endblock %}
 

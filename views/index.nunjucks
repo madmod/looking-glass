@@ -3,4 +3,10 @@
 {% block content %}
   <h1>{{ title }}</h1>
   <p>Welcome to {{ title }}</p>
+  
+  <br>
+  
+  <iframe src="https://player.vimeo.com/video/123943300?autoplay=1" width="1000" height="2000" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
 {% endblock %}
+

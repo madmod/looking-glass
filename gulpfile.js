@@ -1,3 +1,6 @@
+'use strict';
+
+
 var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   plumber = require('gulp-plumber'),

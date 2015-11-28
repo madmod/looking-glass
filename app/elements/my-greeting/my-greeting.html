@@ -21,21 +21,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <span class="paper-font-body2">Update text to change the greeting.</span>
     <!-- Listens for "input" event and sets greeting to <input>.value -->
     <input class="paper-font-body2" value="{{greeting::input}}">
+    <mqtt-connection
+      auto
+      id="connection"
+      connected="{{connected}}"
+      url="ws://localhost:3000">
+
+      <mqtt-subscription
+        topic="looking-glass/alert/#"
+        number-of-messages="Infinity"
+        last-message="{{lastMessage}}"
+        messages="{{messages}}"
+        subscribed="{{subscribed}}"></mqtt-subscription>
+      <mqtt-publish
+        auto
+        retained
+        topic="loooking-glass/alert/echo"
+        payload="Hello world!"
+        qos="1"></mqtt-publish>
+    </mqtt-connection>
+
+    <p>Connected: {{connected}}</p>
+    <p>Last Message: {{lastMessage.parsedPayload}}</p>
+    <p>Subscribed: {{subscribed}}</p>
+    <p>
+      Messages:
+      <template is="dom-repeat" items="{{messages}}" as="message">
+        <div>
+          <span>{{message.topic}}</span>:<span>{{message.parsedPayload}}</span>
+        </div>
+      </template>
+    </p>
+    <paper-button raised on-tap="sendMessage">Send Message</paper-button>
   </template>
 
   <script>
     (function() {
       'use strict';
-      
+
+      var connection = document.querySelector('#connection');
+
       Polymer({
         is: 'my-greeting',
 
         properties: {
           greeting: {
             type: String,
-            value: 'Welcome!',
+            value: 'Amaze!',
             notify: true
           }
+        },
+        sendMessage: function () {
+          this.$.connection.publish('looking-glass/alert/echo', this.greeting);
         }
       });
     })();

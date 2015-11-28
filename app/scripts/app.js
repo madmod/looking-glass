@@ -34,17 +34,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
-
-    var client = mqtt.connect();
-
-    client.subscribe('test');
-
-    client.on('message', function(topic, payload) {
-      alert([topic, payload].join(': '));
-      console.log('Got MQTT message:', topic, payload);
-    });
-
-    client.publish('mqtt/demo', 'hello world!');
   });
 
   // See https://github.com/Polymer/polymer/issues/1381

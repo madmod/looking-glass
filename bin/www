@@ -3,7 +3,7 @@
 basedir=`dirname $0`
 mosca=$basedir/../node_modules/mosca/bin/mosca
 bunyan=$basedir/../node_modules/.bin/bunyan
-appdir=$basedir/../app
+appdir=$basedir/../dist
 
 $mosca --http-port 3000 --http-static $appdir --http-bundle --verbose | $bunyan
 

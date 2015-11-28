@@ -1,5 +1,7 @@
 node_modules/
-public/components
+/public/bower_components/
+/dist/
+.tmp/
 .sass-cache
 npm-debug.log
 .DS_Store

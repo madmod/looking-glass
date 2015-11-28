@@ -1,0 +1,20 @@
+
+
+Welcome to Node-RED
+===================
+
+27 Nov 19:47:31 - [info] Node-RED version: v0.12.1
+27 Nov 19:47:31 - [info] Node.js  version: v0.12.5
+27 Nov 19:47:31 - [info] Loading palette nodes
+27 Nov 19:47:32 - [warn] ------------------------------------------
+27 Nov 19:47:32 - [warn] Failed to register 2 node types
+27 Nov 19:47:32 - [warn] Run with -v for details
+27 Nov 19:47:32 - [warn] ------------------------------------------
+27 Nov 19:47:32 - [info] Settings file  : /Users/john/.node-red/settings.js
+27 Nov 19:47:32 - [info] User directory : /Users/john/.node-red
+27 Nov 19:47:32 - [info] Flows file : /Users/john/.node-red/flows_dakine.local.json
+27 Nov 19:47:32 - [info] Server now running at http://127.0.0.1:1880/
+27 Nov 19:47:32 - [info] Starting flows
+27 Nov 19:47:32 - [info] Started flows
+27 Nov 19:47:32 - [info] [mqtt-broker:677b303.f9884d] Connected to broker: mqtt://localhost:1883
+27 Nov 19:47:38 - [warn] [websocket-client:75a955d0.8a56ac] ws:undefined : Error: not opened

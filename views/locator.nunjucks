@@ -1,8 +1,0 @@
-{% extends 'index.nunjucks' %}
-
-{% block locator %}
-  <h2>Braintrust Locator</h2>
-  <div></div>
-{% endblock %}
-
-

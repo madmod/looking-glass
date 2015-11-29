@@ -28,9 +28,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 10px;
       }
 
+      .mqtt-card {
+        --paper-card-header-color: var(--paper-blue-500);
+      }
+
+      .card-title {
+        background: var(--default-primary-color);
+        color: var(--text-primary-color);
+        @apply(--paper-font-display1);
+      }
+
       .card-detail {
-        text-align: right;
-        color: grey;
+        padding: 5px;
+        @apply(--paper-font-subhead);
       }
     </style>
 
@@ -68,12 +78,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <zero-list-hero layout="masonry">
       <template is="dom-repeat" items="{{items}}" sort="_reverseSort">
-        <paper-card class="mqtt-card" hero-id$="{{item.id}}" heading="{{item.title}}" image="{{item.image}}">
-          <div class="card-label card-content {{ { hidden: !item.label } | tokenList }}">
+        <paper-card class="mqtt-card" hero-id$="{{item.id}}">
+          <div class="card-content {{ { hidden: !item.title } | tokenList }}">
+            <paper-toolbar>
+              <div class="card-title">{{item.title}}</div>
+            </paper-toolbar>
+          </div>
+          <img style="background-color: lightgray; width: 100%;"
+            sizing="cover"
+            src="{{item.image}}"></img>
+          <div class="card-content card-label {{ { hidden: !item.label } | tokenList }}">
             {{item.label}}
           </div>
-          <div class="card-detail paper-font-caption {{ { hidden: !item.detail } | tokenList }}">
-            {{item.detail}}
+          <div class="card-content {{ { hidden: !item.detail } | tokenList }}">
+            <div class="card-detail">
+              {{item.detail}}
+            </div>
           </div>
         </paper-card>
       </template>
@@ -165,6 +185,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             return 0;
           }
           return i > j ? -1 : 1;
+        },
+
+        showImage: function (image) {
+          console.log('show image', image);
+          return !!image ? image : null;
         }
 
       });

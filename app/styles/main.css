@@ -8,7 +8,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 body {
-  background: #fafafa;
+  background: #eee;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
+
+
+/* Fix empty images in zero-list-hero items */
+#img[src=""] {
+  display: none !important;
+}
+
+/* Hide the scrollbar so that animations dont get messed up. */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fix weirdness when mqtt-badges are shown before the first card which causes card images to be the wrong size. */
+.zero-list-hero .iron-image {
+  width: 100% !important;
+}
+
+
+.hidden {
+  display: none !important;
+}
+
+

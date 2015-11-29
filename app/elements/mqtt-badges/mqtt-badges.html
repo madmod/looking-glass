@@ -1,0 +1,136 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../ha-label-badge/ha-label-badge.html">
+
+<dom-module id="mqtt-badges">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <!--
+    First we create a mqtt-connection that actually makes a mqtt-connection over websockets to an MQTT broker.
+    That connection will create {{client}} and populates the variable
+    -->
+    <mqtt-connection auto
+      id="connection-badges"
+      url="ws://localhost:3000"
+      connected="{{connected}}"
+      client="{{client}}">
+    </mqtt-connection>
+
+
+    <!--
+    The second mqtt-connection has not set the auto attribute nor the url property and therefor will not create the
+    MQTT client, but will get connected as soon the client property will be set.
+    -->
+
+    <mqtt-connection id="connection2-badges"
+      connected="{{connected2}}"
+      client="[[client]]"
+      subscriptions="{{subscriptions}}">
+
+      <mqtt-subscription topic="looking-glass/badge/#"
+        number-of-messages="10"
+        messages="{{messages}}"
+        on-mqtt-subscription-message="addItem"></mqtt-subscription>
+    </mqtt-connection>
+
+    <small class="paper-font-caption" style="color: lightgrey;">[[connectionStatusToString(connected)]]</small>
+
+    <div class="layout horizontal center-justified">
+      <template is="dom-repeat" items="{{items}}">
+        <ha-label-badge
+          value="{{item.value}}"
+          title="{{item.title}}"
+          label="{{item.label}}"
+          image="{{item.image}}"
+          description="{{item.description}}"
+          icon="{{item.icon}}"></ha-label-badge>
+      </template>
+    </div>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      var connection = document.querySelector('#connection-badges');
+
+      Polymer({
+        is: 'mqtt-badges',
+
+        properties: {
+          items: {
+            type: Array,
+            notify: true,
+            value: []
+          }
+        },
+
+        connectionStatusToString: function (condition) {
+          if (condition){
+            return "connected";
+          } else {
+            return "disconnected";
+          }
+        },
+
+        addItem: function (event) {
+          console.info('add item', event);
+          var payload = event.detail.parsedPayload;
+          var topic = event.detail.message.topic;
+
+          // Try to parse the MQTT payload as JSON.
+          try {
+            var item = JSON.parse(payload);
+            item.topic = topic;
+            // Swap out existing duplicate cards with any new data.
+            // TODO: Add an option to move cards to the front on refresh.
+            var oldIndex = this.items.findIndex(function (possible) {
+              return item.id == possible.id;
+            });
+
+            // This is a duplicate so swap it out.
+            if (oldIndex > -1) {
+              var oldItem = this.items[oldIndex]
+              // Stop the old timeout.
+              clearTimeout(oldItem._timeoutId);
+              // Swap out the old card for the new one.
+              this.splice('items', oldIndex, 1, item);
+            }
+            // Add the new card to the top.
+            else {
+              item.id = item.id || event.timeStamp;
+              // Add the item
+              this.push('items', item);
+            }
+
+            // Default expiration of 60 seconds.
+            var expirationSeconds = parseInt(item.seconds || 60, 10);
+
+            // Remove cards after the specified amount of time.
+            // Save the timeout id so we can reset it if it is updated.
+            item._timeoutId = setTimeout(function () {
+              var index = this.items.indexOf(item);
+              this.splice('items', index, 1);
+            }.bind(this), expirationSeconds * 1000)
+
+            /*
+            // Limit the total number of items
+            if (this.items.length > 8) {
+              this.shift('items')
+            }
+            */
+          } catch (err) {
+            console.error('Error parsing payload', err, event, payload, topic)
+          }
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

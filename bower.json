@@ -9,7 +9,8 @@
     "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
     "polymer": "Polymer/polymer#^1.2.0",
     "paper-menu": "PolymerElements/paper-menu#4fecb43601",
-    "mqtt-elements": "~0.0.4-beta"
+    "mqtt-elements": "~0.0.4-beta",
+    "zero-list-hero": "~0.2.1"
   },
   "devDependencies": {
     "web-component-tester": "*"

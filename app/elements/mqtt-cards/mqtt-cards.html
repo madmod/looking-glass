@@ -1,0 +1,174 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/zero-list-hero/zero-list-hero.html">
+
+<dom-module id="mqtt-cards">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+
+      img#img[src=""] {
+        display: none !important;
+      }
+
+      .mqtt-card {
+        padding: 5px;
+        margin: 10px;
+      }
+
+      .card-detail {
+        text-align: right;
+        color: grey;
+      }
+    </style>
+
+    <!--
+    First we create a mqtt-connection that actually makes a mqtt-connection over websockets to an MQTT broker.
+    That connection will create {{client}} and populates the variable
+    -->
+    <mqtt-connection auto
+      id="connection"
+      url="ws://localhost:3000"
+      connected="{{connected}}"
+      client="{{client}}">
+    </mqtt-connection>
+
+
+    <!--
+    The second mqtt-connection has not set the auto attribute nor the url property and therefor will not create the
+    MQTT client, but will get connected as soon the client property will be set.
+    -->
+
+    <mqtt-connection id="connection2"
+      connected="{{connected2}}"
+      client="[[client]]"
+      subscriptions="{{subscriptions}}">
+
+      <mqtt-subscription topic="looking-glass/card/#"
+        number-of-messages="10"
+        messages="{{messages}}"
+        on-mqtt-subscription-message="addItem"></mqtt-subscription>
+    </mqtt-connection>
+
+    <!--
+    <small class="paper-font-caption" style="color: lightgrey;">[[connectionStatusToString(connected)]]</small>
+    -->
+
+    <zero-list-hero layout="masonry">
+      <template is="dom-repeat" items="{{items}}" sort="_reverseSort">
+        <paper-card class="mqtt-card" hero-id$="{{item.id}}" heading="{{item.title}}" image="{{item.image}}">
+          <div class="card-label card-content {{ { hidden: !item.label } | tokenList }}">
+            {{item.label}}
+          </div>
+          <div class="card-detail paper-font-caption {{ { hidden: !item.detail } | tokenList }}">
+            {{item.detail}}
+          </div>
+        </paper-card>
+      </template>
+    </zero-list-hero>
+
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      var connection = document.querySelector('#connection');
+
+      Polymer({
+        is: 'mqtt-cards',
+
+        properties: {
+          items: {
+            type: Array,
+            notify: true,
+            value: []
+          }
+        },
+
+        connectionStatusToString: function (condition) {
+          if (condition){
+            return "connected";
+          } else {
+            return "disconnected";
+          }
+        },
+
+        addItem: function (event) {
+          console.info('add item', event);
+          var payload = event.detail.parsedPayload;
+          var topic = event.detail.message.topic;
+
+          // Try to parse the MQTT payload as JSON.
+          try {
+            var item = JSON.parse(payload);
+            item.topic = topic;
+            // Swap out existing duplicate cards with any new data.
+            // TODO: Add an option to move cards to the front on refresh.
+            var oldIndex = this.items.findIndex(function (possible) {
+              return item.id == possible.id;
+            });
+
+            // This is a duplicate so swap it out.
+            if (oldIndex > -1) {
+              var oldItem = this.items[oldIndex]
+              // Stop the old timeout.
+              clearTimeout(oldItem._timeoutId);
+              // Swap out the old card for the new one.
+              this.splice('items', oldIndex, 1, item);
+            }
+            // Add the new card to the top.
+            else {
+              item.id = item.id || event.timeStamp;
+              // Add the item
+              this.push('items', item);
+            }
+
+            // Default expiration of 60 seconds.
+            var expirationSeconds = parseInt(item.seconds || 60, 10);
+
+            // Remove cards after the specified amount of time.
+            // Save the timeout id so we can reset it if it is updated.
+            item._timeoutId = setTimeout(function () {
+              var index = this.items.indexOf(item);
+              this.splice('items', index, 1);
+            }.bind(this), expirationSeconds * 1000)
+
+            /*
+            // Limit the total number of items
+            if (this.items.length > 8) {
+              this.shift('items')
+            }
+            */
+          } catch (err) {
+            console.error('Error parsing payload', err, event, payload, topic)
+          }
+        },
+
+        _reverseSort: function (a, b) {
+          var i = this.items.indexOf(a);
+          var j = this.items.indexOf(b);
+          console.log('sort', a, b, i, j)
+          if (i == j) {
+            return 0;
+          }
+          return i > j ? -1 : 1;
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>

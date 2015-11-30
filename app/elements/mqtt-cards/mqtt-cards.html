@@ -24,8 +24,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .mqtt-card {
-        padding: 5px;
+        /*padding: 5px;*/
         margin: 10px;
+        min-width: 20%;
+        max-width: 40%;
       }
 
       .mqtt-card {
@@ -76,6 +78,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <small class="paper-font-caption" style="color: lightgrey;">[[connectionStatusToString(connected)]]</small>
     -->
 
+    <div class="horizontal layout around-justified wrap">
+      <template is="dom-repeat" class="card-list" items="{{items}}" sort="_reverseSort">
+        <paper-card class="mqtt-card" hero-id$="{{item.id}}">
+          <div class="card-content">
+            <template is="dom-if" if="{{item.title}}">
+              <paper-toolbar>
+                <div class="card-title">{{item.title}}</div>
+              </paper-toolbar>
+            </template>
+            <template is="dom-if" if="{{item.image}}">
+              <img style="background-color: lightgray; width: 100%;"
+              sizing="cover"
+              src="{{item.image}}"></img>
+            </template>
+            <template is="dom-if" if="{{item.label}}">
+              <div class="card-label">
+                {{item.label}}
+              </div>
+            </template>
+            <template is="dom-if" if="{{item.detail}}">
+              <div class="card-detail">
+                {{item.detail}}
+              </div>
+            </template>
+            <template is="dom-if" if="{{item.html}}">
+              <html-content contents="{{item.html}}"></html-content>
+            </template>
+          </div>
+        </paper-card>
+      </template>
+    </div>
+
+      <!--
     <zero-list-hero layout="masonry">
       <template is="dom-repeat" items="{{items}}" sort="_reverseSort">
         <paper-card class="mqtt-card" hero-id$="{{item.id}}">
@@ -95,9 +130,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               {{item.detail}}
             </div>
           </div>
+          <div class="card-content">
+            <div id="htmlContent">
+            </div>
+          </div>
         </paper-card>
       </template>
     </zero-list-hero>
+    -->
 
   </template>
 

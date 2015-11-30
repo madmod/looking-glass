@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="html-content">
+  <template>
+    <div id="content"></div>
+  </template>
+
+  <script>
+    (function () {
+      'use strict';
+
+      Polymer({
+        is: 'html-content',
+
+        ready: function(){
+          var html = this.contents;
+          console.log('html', html)
+          if (!!html) {
+            this.$.content.innerHTML = html;
+          }
+        },
+
+        properties: {
+          contents: {
+            type: String,
+            notify: true,
+            value: ''
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

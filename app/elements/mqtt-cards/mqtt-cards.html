@@ -81,10 +81,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="horizontal layout around-justified wrap">
       <template is="dom-repeat" class="card-list" items="{{items}}" sort="_reverseSort">
         <paper-card class="mqtt-card" hero-id$="{{item.id}}">
-          <div class="card-content">
+          <div class="card-content" style="background-color: {{item.backgroundColor}}; color: {{item.textColor}};">
             <template is="dom-if" if="{{item.title}}">
-              <paper-toolbar>
-                <div class="card-title">{{item.title}}</div>
+              <paper-toolbar style="background-color: {{item.titleBackgroundColor}}; color: {{item.titleColor}};">
+                <div class="card-title" style="background-color: {{item.titleBackgroundColor}}; color: {{item.titleColor}};">{{item.title}}</div>
               </paper-toolbar>
             </template>
             <template is="dom-if" if="{{item.image}}">

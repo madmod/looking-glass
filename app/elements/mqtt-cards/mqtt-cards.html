@@ -44,6 +44,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 5px;
         @apply(--paper-font-subhead);
       }
+
+      .card-actions {
+        padding: 5px;
+        @apply(--paper-font-subhead);
+      }
     </style>
 
     <!--
@@ -105,10 +110,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <template is="dom-if" if="{{item.html}}">
               <html-content contents="{{item.html}}"></html-content>
             </template>
-            <template is="dom-if" if="{{item.action}}">
-              <paper-button raised on-tap="publishAction" data="{{item}}">{{item.actionTitle}}</paper-button>
-            </template>
           </div>
+          <template is="dom-if" if="{{item.action}}">
+            <div class="card-actions">
+              <paper-button on-tap="publishAction" data="{{item}}">{{item.actionTitle}}</paper-button>
+            </div>
+          </template>
         </paper-card>
       </template>
     </div>

@@ -214,6 +214,7 @@ gulp.task('cache-config', function(callback) {
 
   glob([
     'index.html',
+    'honcho.html',
     './',
     'bower_components/webcomponentsjs/webcomponents-lite.min.js',
     '{elements,scripts,styles}/**/*.*'],

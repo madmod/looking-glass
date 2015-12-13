@@ -1,4 +1,4 @@
-<!--
+
 @license
 Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       client="[[client]]"
       subscriptions="{{subscriptions}}">
 
-      <mqtt-subscription topic="looking-glass/card/#"
+      <mqtt-subscription topic="{{topic}}"
         number-of-messages="10"
         messages="{{messages}}"
         on-mqtt-subscription-message="addItem"></mqtt-subscription>
@@ -104,6 +104,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
             <template is="dom-if" if="{{item.html}}">
               <html-content contents="{{item.html}}"></html-content>
+            </template>
+            <template is="dom-if" if="{{item.action}}">
+              <paper-button raised on-tap="publishAction()" data="{{item}}">{{item.actionTitle}}</paper-button>
             </template>
           </div>
         </paper-card>
@@ -151,6 +154,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'mqtt-cards',
 
         properties: {
+          mqttHost: {
+            type: String,
+            value: 'localhost'
+          },
+          topic: {
+            type: String,
+            value: 'looking-glass/card/#'
+          },
           items: {
             type: Array,
             notify: true,
@@ -230,6 +241,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         showImage: function (image) {
           console.log('show image', image);
           return !!image ? image : null;
+        },
+
+        publishAction: function (event) {
+          console.log('event', event);
+          var item = event.model.item;
+          console.log('item', item);
         }
 
       });

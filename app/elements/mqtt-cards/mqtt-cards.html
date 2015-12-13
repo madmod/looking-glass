@@ -51,7 +51,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .card-actions paper-button {
+        @apply(--paper-font-title);
+        text-transform: none;
         background-color: var(--paper-green-500);
+      }
+
+      .card-actions paper-button:not(:first-child) {
+        margin-top: 10px;
       }
     </style>
 
@@ -90,41 +96,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="horizontal layout around-justified wrap">
       <template is="dom-repeat" class="card-list" items="{{items}}" sort="_reverseSort">
         <paper-card class="mqtt-card" hero-id$="{{item.id}}">
-          <div class="card-content" style="background-color: {{item.backgroundColor}}; color: {{item.textColor}};">
-            <template is="dom-if" if="{{item.title}}">
-              <paper-toolbar style="background-color: {{item.titleBackgroundColor}}; color: {{item.titleColor}};">
-                <div class="card-title" style="background-color: {{item.titleBackgroundColor}}; color: {{item.titleColor}};">{{item.title}}</div>
-              </paper-toolbar>
-            </template>
-            <template is="dom-if" if="{{item.image}}">
-              <img style="background-color: lightgray; width: 100%;"
-              sizing="cover"
-              src="{{item.image}}"></img>
-            </template>
-            <template is="dom-if" if="{{item.label}}">
-              <div class="card-label">
-                {{item.label}}
-              </div>
-            </template>
-            <template is="dom-if" if="{{item.detail}}">
-              <div class="card-detail">
-                {{item.detail}}
-              </div>
-            </template>
-            <template is="dom-if" if="{{item.html}}">
-              <html-content contents="{{item.html}}"></html-content>
-            </template>
-          </div>
-          <template is="dom-if" if="{{item.action}}">
+          <template is="dom-if" if="{{item.title}}">
+            <div class="card-content" style="background-color: {{item.backgroundColor}}; color: {{item.textColor}};">
+              <template is="dom-if" if="{{item.title}}">
+                <paper-toolbar style="background-color: {{item.titleBackgroundColor}}; color: {{item.titleColor}};">
+                  <div class="card-title" style="background-color: {{item.titleBackgroundColor}}; color: {{item.titleColor}};">{{item.title}}</div>
+                </paper-toolbar>
+              </template>
+              <template is="dom-if" if="{{item.image}}">
+                <img style="background-color: lightgray; width: 100%;"
+                sizing="cover"
+                src="{{item.image}}"></img>
+              </template>
+              <template is="dom-if" if="{{item.label}}">
+                <div class="card-label">
+                  {{item.label}}
+                </div>
+              </template>
+              <template is="dom-if" if="{{item.detail}}">
+                <div class="card-detail">
+                  {{item.detail}}
+                </div>
+              </template>
+              <template is="dom-if" if="{{item.html}}">
+                <html-content contents="{{item.html}}"></html-content>
+              </template>
+            </div>
+          </template>
+          <template is="dom-if" if="{{item.actions}}">
             <div class="card-actions layout vertical">
-              <paper-button
-                class="action-button"
-                raised
-                on-tap="publishAction"
-                data="{{item}}"
-                style="background-color: {{item.actionBackgroundColor}}; color: {{item.actionTextColor}};">
-                {{item.actionTitle}}
-              </paper-button>
+              <template is="dom-repeat" class="action-list" items="{{item.actions}}">
+                <paper-button
+                  class="action-button"
+                  raised
+                  on-tap="publishAction"
+                  data="{{item}}"
+                  style="background-color: {{item.backgroundColor}}; color: {{item.textColor}};">
+                  {{item.title}}
+                </paper-button>
+              </template>
             </div>
           </template>
         </paper-card>
@@ -268,7 +278,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log('event', event);
           var item = event.model.item;
           console.log('item', item);
-          this.$.connection.publish(item.action, item.actionPayload);
+          this.$.connection.publish(item.topic, item.payload);
         }
 
       });

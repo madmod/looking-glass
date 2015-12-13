@@ -106,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <html-content contents="{{item.html}}"></html-content>
             </template>
             <template is="dom-if" if="{{item.action}}">
-              <paper-button raised on-tap="publishAction()" data="{{item}}">{{item.actionTitle}}</paper-button>
+              <paper-button raised on-tap="publishAction" data="{{item}}">{{item.actionTitle}}</paper-button>
             </template>
           </div>
         </paper-card>
@@ -208,14 +208,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             // Default expiration of 60 seconds.
-            var expirationSeconds = parseInt(item.seconds || 60, 10);
+            if (item.seconds != 'none') {
+              console.log('no expire')
+              var expirationSeconds = parseInt(item.seconds || 60, 10);
 
-            // Remove cards after the specified amount of time.
-            // Save the timeout id so we can reset it if it is updated.
-            item._timeoutId = setTimeout(function () {
-              var index = this.items.indexOf(item);
-              this.splice('items', index, 1);
-            }.bind(this), expirationSeconds * 1000)
+              // Remove cards after the specified amount of time.
+              // Save the timeout id so we can reset it if it is updated.
+              item._timeoutId = setTimeout(function () {
+                var index = this.items.indexOf(item);
+                this.splice('items', index, 1);
+              }.bind(this), expirationSeconds * 1000)
+            }
 
             /*
             // Limit the total number of items
@@ -247,6 +250,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           console.log('event', event);
           var item = event.model.item;
           console.log('item', item);
+          this.$.connection.publish(item.action, item.actionPayload);
         }
 
       });

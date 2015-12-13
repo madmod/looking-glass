@@ -9,6 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/zero-list-hero/zero-list-hero.html">
 
 <dom-module id="mqtt-cards">
@@ -46,8 +47,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .card-actions {
-        padding: 5px;
-        @apply(--paper-font-subhead);
+        padding: 10px 5px;
+      }
+
+      .card-actions paper-button {
+        background-color: var(--paper-green-500);
       }
     </style>
 
@@ -112,8 +116,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </template>
           </div>
           <template is="dom-if" if="{{item.action}}">
-            <div class="card-actions">
-              <paper-button on-tap="publishAction" data="{{item}}">{{item.actionTitle}}</paper-button>
+            <div class="card-actions layout vertical">
+              <paper-button class="action-button" raised on-tap="publishAction" data="{{item}}">{{item.actionTitle}}</paper-button>
             </div>
           </template>
         </paper-card>

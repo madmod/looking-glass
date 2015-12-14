@@ -99,8 +99,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <small class="paper-font-caption" style="color: lightgrey;">[[connectionStatusToString(connected)]]</small>
     -->
 
-    <div class="horizontal layout around-justified wrap">
-      <template is="dom-repeat" class="card-list" items="{{items}}" sort="_reverseSort">
+    <div class="horizontal layout around-justified wrap"> <template is="dom-repeat" class="card-list" items="{{items}}" sort="_reverseSort">
         <paper-card class="mqtt-card" hero-id$="{{item.id}}">
           <template is="dom-if" if="{{item.title}}">
             <div class="card-content" style="background-color: {{item.backgroundColor}}; color: {{item.textColor}};">
@@ -137,7 +136,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   raised
                   on-tap="publishAction"
                   data="{{item}}"
-                  style="background-color: {{item.color}}; color: {{item.textColor}};">
+                  style$="{{_computeActionStyle(item)}}">
                   {{item.title}}
                 </paper-button>
               </template>
@@ -285,6 +284,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var item = event.model.item;
           console.log('item', item);
           this.$.connection.publish(item.topic, item.payload);
+        },
+
+        _computeActionStyle: function (item) {
+          var styles = '';
+          if (item.color) styles += 'background-color: ' + item.color + ';';
+          if (item.textColor) styles += 'color: ' + item.textColor + ';';
+          return styles;
         }
 
       });

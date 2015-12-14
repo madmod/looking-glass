@@ -53,8 +53,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .card-actions paper-button {
         @apply(--paper-font-title);
+
         text-transform: none;
-        background-color: var(--paper-green-500);
+        background-color: var(--paper-green-400);
+        min-height: 70px;
+        display: flex;
+        justify-content: center; /* align horizontal */
+        align-items: center;
       }
 
       .card-actions paper-button:not(:first-child) {
@@ -132,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   raised
                   on-tap="publishAction"
                   data="{{item}}"
-                  style="background-color: {{item.backgroundColor}}; color: {{item.textColor}};">
+                  style="background-color: {{item.color}}; color: {{item.textColor}};">
                   {{item.title}}
                 </paper-button>
               </template>
